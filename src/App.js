@@ -1,24 +1,25 @@
-import logo from './logo.svg';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
-
+import EquipmentList from './components/equipment/EquipmentList';
+import { EquipmentContextProvider } from './contexts/EquipmentContext';
+import MaintenanceRequest from './components/maintenance/maintenanceRequest/MaintenanceRequest';
+import MaintenanceLog from './components/maintenance/maintenanceLog/MaintenanceLog';
+import { TechnicianContextProvider } from './contexts/TechnicianContext';
+import Dashboard from './components/dashboard/Dashboard';
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <EquipmentContextProvider>
+      <TechnicianContextProvider>
+        <Dashboard />
+          <Routes>
+            <Route exact path="/" element={<EquipmentList />} />
+            <Route path="/maintenance-requests/:tagNumber" element= {<MaintenanceRequest />} />
+            <Route path="/maintenance-logs/:tagNumber" element={<MaintenanceLog />} />
+            {/* <Route path="/parts" component={Parts} /> */}
+            {/* <Route path="/technicians" component={Technicians} /> */}
+          </Routes>
+      </TechnicianContextProvider>
+    </EquipmentContextProvider>
   );
 }
 
