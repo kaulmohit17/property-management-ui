@@ -25,12 +25,12 @@ const MaintenanceLogUpdateForm = ({ log, onUpdate, onCancel }) => {
       requestedBy: technicians.find((technician) => technician.technicianId === updatedLog.requestedBy),
       technicians: updatedLog.technicians.map(technicianId => technicians.find(technician => technician.technicianId === technicianId))
     }
-    await axios.put(`/api/v1/maintenanceRecords/${log.maintenanceRecordId}`, updatedLog);
-    onUpdate();
+    const response = await axios.put(`/api/v1/maintenanceRecords/${log.maintenanceRecordId}`, updatedLog);
+    onUpdate(response.data);
   }
 
   function formattedString(log) {
-    const lowerCaseString = log.maintenanceType.toLowerCase();
+    const lowerCaseString = (log.maintenanceType || '').toLowerCase();
     return lowerCaseString.charAt(0).toUpperCase() + lowerCaseString.slice(1)
   }
 
@@ -117,7 +117,7 @@ const MaintenanceLogUpdateForm = ({ log, onUpdate, onCancel }) => {
         <Controller
           control={control}
           name="requestedBy"
-          defaultValue={log.requestedBy.technicianId}
+          defaultValue={log.requestedBy?.technicianId || null}
           render={({ field: { onChange, value, name } }) => (
             <Select
               styles={{
@@ -176,7 +176,7 @@ const MaintenanceLogUpdateForm = ({ log, onUpdate, onCancel }) => {
               name={name}
               placeholder="Select Technicians"
               options={technicianOptions}
-              value={technicianOptions.find(e => e.value === value)}
+              value={technicianOptions.filter(e => (value || []).includes(e.value))}
               onChange={e => onChange(e.map((technician) => technician.value))}
             />
           )}

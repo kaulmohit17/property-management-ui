@@ -40,8 +40,14 @@ const MaintenanceLog = () => {
     setShowUpdatedForm(true);
   }
 
-  const updateLog = () => {
-    fetchLogs();
+  const updateLog = (updatedLog) => {
+    if (updatedLog) {
+      setLogs(prevLogs => prevLogs.map(log =>
+        log.maintenanceRecordId === updatedLog.maintenanceRecordId ? updatedLog : log
+      ));
+    } else {
+      fetchLogs();
+    }
     setShowUpdatedForm(false);
   }
 
